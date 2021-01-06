@@ -2,7 +2,7 @@
 
 LineChart::LineChart(QWidget *parent){
     _AxisPen=QPen(Qt::white,1.5);
-    _SplitterPen=QPen(Qt::white,0.5,Qt::DashLine);
+    _GridPen=QPen(Qt::white,0.5,Qt::DashLine);
     _LinePlotPen=QPen(QColor(0,175,245,255),1);
     _iYAxisMin=0;
     _iYAxisMax=50;
@@ -29,7 +29,7 @@ void LineChart::paintEvent(QPaintEvent *){
     painter.drawLine(TopLeft,TopRight);
     painter.drawLine(TopRight,BottomRight);
 
-    painter.setPen(_SplitterPen);
+    painter.setPen(_GridPen);
     if (this->width()>200)
     {
         painter.drawLine((TopLeft+TopRight)/2, (BottomLeft+BottomRight)/2);
@@ -39,10 +39,10 @@ void LineChart::paintEvent(QPaintEvent *){
             painter.drawLine(TopLeft+(TopRight-TopLeft)*3/4, BottomLeft+(BottomRight-BottomLeft)*3/4);
         }
     }
-    if (this->height()>300)
+    if (this->height()>125)
     {
         painter.drawLine((TopLeft+BottomLeft)/2, (TopRight+BottomRight)/2);
-        if (this->height()>800)
+        if (this->height()>245)
         {
             painter.drawLine(TopLeft+(BottomLeft-TopLeft)/4, TopRight+(BottomRight-TopRight)/4);
             painter.drawLine(TopLeft+(BottomLeft-TopLeft)*3/4, TopRight+(BottomRight-TopRight)*3/4);

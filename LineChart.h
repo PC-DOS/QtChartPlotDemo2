@@ -50,13 +50,13 @@ public:
     void SetYAxisRange(int iMin=0, int iMax=100);
     void SetLinePlotPen(QPen qpnPen) { _LinePlotPen=qpnPen; }
     void SetAxisPen(QPen qpnPen) { _AxisPen=qpnPen; }
-    void SetSplitterPen(QPen qpnPen) { _SplitterPen=qpnPen; }
+    void SetGridPen(QPen qpnPen) { _GridPen=qpnPen; }
     void SetMargin(int iLeft=20, int iRight=20, int iTop=20, int iBottom=20);
 
 private:
     QPen _LinePlotPen;
     QPen _AxisPen;
-    QPen _SplitterPen;
+    QPen _GridPen;
     int _iYAxisMin;
     int _iYAxisMax;
 
