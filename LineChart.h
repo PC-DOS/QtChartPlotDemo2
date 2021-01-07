@@ -54,18 +54,23 @@ public:
     ~LineChart();
     virtual void paintEvent(QPaintEvent *);
 
-    QVector<double> DataBuffer; //Access this member directly to set the data of the chart.
+    QVector< QVector<double> > DataBuffer; //Access this member directly to set the data of the chart.
 
-    Q_SLOT void Replot(bool bUseQueuedReplot=false); //Replot the chart.
+    void AddLayer(QPen qpnLinePlotPen=QPen(QColor(0,175,245,255),1));
+    void RemoveLayer(int iLayerIndex);
+    int GetLayerCount() { return DataBuffer.count(); }
+
+    void ReplotSingleLayer(int iLayerIndex=0, bool bUseQueuedReplot=false); //Replot the only one layer of the chart.
+    Q_SLOT void Replot(bool bUseQueuedReplot=false); //Replot all the charts.
 
     void SetYAxisRange(int iMin=0, int iMax=100); //Set the range of Y axis
-    void SetLinePlotPen(QPen qpnPen) { _LinePlotPen=qpnPen; } //Set pen used to plot the data.
+    void SetLinePlotPen(int iLayerIndex, QPen qpnPen);//Set pen used to plot the data.
     void SetAxisPen(QPen qpnPen) { _AxisPen=qpnPen; } //Set pen used to draw the axis.
     void SetGridPen(QPen qpnPen) { _GridPen=qpnPen; } //Set pen used to draw the background grids.
     void SetMargin(int iLeft=20, int iRight=20, int iTop=20, int iBottom=20); //Set the margin of the displayed chart.
 
 private:
-    QPen _LinePlotPen; //INTERNAL: The pen used to plot the data.
+    QVector<QPen> _LinePlotPen; //INTERNAL: The pen used to plot the data.
     QPen _AxisPen; //INTERNAL: The pen used to draw the axis.
     QPen _GridPen; //INTERNAL: The pen used to draw the background grids.
     int _iYAxisMin; //INTERNAL: The minial value of Y axis
@@ -76,6 +81,9 @@ private:
     int _iTopMargin;
     int _iBottomMargin;
 
+    QVector<QPainterPath> _LayerCahce; //INTERNAL: Cache of a layer
+    QVector<bool> _LayerIndexesToReplot; //INTERNAL: Bitmap to indicate layers to replot.
+    bool _IsReplotIndexesDefined; //INTERNAL: Chack whether a bitmap indicating layers to replot has been set.
     bool _IsReplotting; //INTERNAL: Check whether the chart is replotting.
     bool _IsReplotQueued; //INTERNAL: Check whether a replot request is queued.
 };

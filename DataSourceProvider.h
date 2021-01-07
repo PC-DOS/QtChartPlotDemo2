@@ -20,6 +20,9 @@ private:
     int _iPointsPerPlot;
 
     QVector<double> _arrData;
+    QVector<double> _arrDAC1;
+    QVector<double> _arrDAC2;
+    QVector<double> _arrDAC3;
 
 public:
     DataSourceProvider();
@@ -45,6 +48,10 @@ public:
     QString GainToString(double dGainInMultiple, bool IsDbEnabled=true, bool IsDbOnly=false);
     QString DisplayTimespanToString();
     QString DisplayTimespanToString(int iDisplayTimespanInMillisecond);
+
+    const QVector<double> &GenerateDAC1();
+    const QVector<double> &GenerateDAC2();
+    const QVector<double> &GenerateDAC3();
 
     const QVector<double> &GeneratePlotForTesting();
 };

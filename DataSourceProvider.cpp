@@ -182,6 +182,30 @@ QString DataSourceProvider::DisplayTimespanToString(int iDisplayTimespanInMillis
     return QString::number(abs(iDisplayTimespanInMillisecond))+QString(" ms");
 }
 
+const QVector<double> & DataSourceProvider::GenerateDAC1(){
+    _arrDAC1.clear();
+    for (int i=1; i<=_iPointsPerPlot;++i){
+        _arrDAC1.push_back(((double(rand())/double(__INT_MAX__)+5)*_dCurrentGain));
+    }
+    return _arrDAC1;
+}
+
+const QVector<double> & DataSourceProvider::GenerateDAC2(){
+    _arrDAC2.clear();
+    for (int i=0; i<_iPointsPerPlot;++i){
+        _arrDAC2.push_back(_arrDAC1[i]*2);
+    }
+    return _arrDAC2;
+}
+
+const QVector<double> & DataSourceProvider::GenerateDAC3(){
+    _arrDAC3.clear();
+    for (int i=0; i<_iPointsPerPlot;++i){
+        _arrDAC3.push_back(_arrDAC1[i]/2);
+    }
+    return _arrDAC3;
+}
+
 const QVector<double> & DataSourceProvider::GeneratePlotForTesting(){
     _arrData.clear();
     for (int i=1; i<=_iPointsPerPlot;++i){
