@@ -34,7 +34,7 @@ void MainWindow::UpdateAxisData(){
 
 void MainWindow::tmrDataGenerationTimer_Tick(){
     ui->chrtData->DataBuffer=datUltrasoud->GeneratePlotForTesting();
-    ui->chrtData->Replot();
+    ui->chrtData->Replot(true);
 #ifdef TIMER_PERFORMANCE_TESTING
     ++iCurrentFrames;
     //++iTotalFrames;

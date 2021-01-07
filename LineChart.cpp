@@ -10,6 +10,8 @@ LineChart::LineChart(QWidget *parent){
     _iRightMargin=20;
     _iTopMargin=20;
     _iBottomMargin=20;
+    _IsReplotting=false;
+    _IsReplotQueued=false;
 }
 
 LineChart::~LineChart(){
@@ -49,14 +51,14 @@ void LineChart::paintEvent(QPaintEvent *){
         }
     }
 
-    if (0==DataBuffer.size()){
+    if (0==DataBuffer.count()){
         return;
     }
 
     painter.setPen(_LinePlotPen);
     int chartWidth = this->width()-_iLeftMargin-_iRightMargin;
     int chartHeight = this->height()-_iTopMargin-_iBottomMargin;
-    int yMax = _iYAxisMax;
+    int yMax = _iYAxisMax-_iYAxisMin;
     int xMax = DataBuffer.count();
     QPainterPath path;
     QPointF tmp;
@@ -71,8 +73,24 @@ void LineChart::paintEvent(QPaintEvent *){
     painter.drawPath(path);
 }
 
-void LineChart::Replot(){
+void LineChart::Replot(bool bUseQueuedReplot){
+    if (bUseQueuedReplot){ //Queue a replot request
+        if (!_IsReplotQueued){
+            _IsReplotQueued=true;
+            QTimer::singleShot(0, this, SLOT(Replot()));
+        }
+    }
+
+    if (_IsReplotting){
+        return; //Avoid signal loopback
+    }
+
+    _IsReplotting=true;
+    _IsReplotQueued=false;
+
     this->update();
+
+    _IsReplotting=false;
 }
 
 void LineChart::SetYAxisRange(int iMin, int iMax){

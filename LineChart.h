@@ -1,3 +1,14 @@
+/* LineChart Widget for Qt
+ * By Picsell Dois @ Southeast University
+ *
+ * A simple charting widget which can be used to plot linear charts.
+ * Such as a simple function, realtime data, etc.
+ *
+ * Code Referenced:
+ * QCustomPlot: https://www.qcustomplot.com/
+ * waveChart: https://github.com/fuchiao/waveChart
+ */
+
 #ifndef LINECHART_H
 #define LINECHART_H
 
@@ -43,27 +54,30 @@ public:
     ~LineChart();
     virtual void paintEvent(QPaintEvent *);
 
-    QVector<double> DataBuffer;
+    QVector<double> DataBuffer; //Access this member directly to set the data of the chart.
 
-    void Replot();
+    Q_SLOT void Replot(bool bUseQueuedReplot=false); //Replot the chart.
 
-    void SetYAxisRange(int iMin=0, int iMax=100);
-    void SetLinePlotPen(QPen qpnPen) { _LinePlotPen=qpnPen; }
-    void SetAxisPen(QPen qpnPen) { _AxisPen=qpnPen; }
-    void SetGridPen(QPen qpnPen) { _GridPen=qpnPen; }
-    void SetMargin(int iLeft=20, int iRight=20, int iTop=20, int iBottom=20);
+    void SetYAxisRange(int iMin=0, int iMax=100); //Set the range of Y axis
+    void SetLinePlotPen(QPen qpnPen) { _LinePlotPen=qpnPen; } //Set pen used to plot the data.
+    void SetAxisPen(QPen qpnPen) { _AxisPen=qpnPen; } //Set pen used to draw the axis.
+    void SetGridPen(QPen qpnPen) { _GridPen=qpnPen; } //Set pen used to draw the background grids.
+    void SetMargin(int iLeft=20, int iRight=20, int iTop=20, int iBottom=20); //Set the margin of the displayed chart.
 
 private:
-    QPen _LinePlotPen;
-    QPen _AxisPen;
-    QPen _GridPen;
-    int _iYAxisMin;
-    int _iYAxisMax;
+    QPen _LinePlotPen; //INTERNAL: The pen used to plot the data.
+    QPen _AxisPen; //INTERNAL: The pen used to draw the axis.
+    QPen _GridPen; //INTERNAL: The pen used to draw the background grids.
+    int _iYAxisMin; //INTERNAL: The minial value of Y axis
+    int _iYAxisMax; //INTERNAL: The maximum value of Y axis
 
-    int _iLeftMargin;
+    int _iLeftMargin; //INTERNAL: Margins
     int _iRightMargin;
     int _iTopMargin;
     int _iBottomMargin;
+
+    bool _IsReplotting; //INTERNAL: Check whether the chart is replotting.
+    bool _IsReplotQueued; //INTERNAL: Check whether a replot request is queued.
 };
 
 #endif // LINECHART_H
