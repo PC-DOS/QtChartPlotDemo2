@@ -46,6 +46,25 @@
 #include <QPen>
 #include <QPainter>
 
+class LineChartLayer{
+public:
+    LineChartLayer();
+    LineChartLayer(QPen qpnPen);
+
+    QVector<double> DataBuffer; //Access this member directly to set the data of the layer.
+
+    bool IsCachingDisabled; //Enable or disable caching.
+    bool IsCached; //Indicate if plot data has been cached.
+    bool IsUpdateRequested; //Indicate if user has requested an update.
+    bool IsForcedUpdateRequested; //Indicate if it's necessary to update this layer, including the cache. For example, a size change.
+
+    QPen LinePlotPen; //The pen used to draw the line plot.
+
+    //INTERNAL MEMBERS//
+    QPainterPath _PathCache;
+
+};
+
 class LineChart : public QWidget {
     Q_OBJECT
 
@@ -54,23 +73,22 @@ public:
     ~LineChart();
     virtual void paintEvent(QPaintEvent *);
 
-    QVector< QVector<double> > DataBuffer; //Access this member directly to set the data of the chart.
+    QVector<LineChartLayer> Layers; //Access this member directly to manipulate the layers of the chart.
 
     void AddLayer(QPen qpnLinePlotPen=QPen(QColor(0,175,245,255),1));
     void RemoveLayer(int iLayerIndex);
-    int GetLayerCount() { return DataBuffer.count(); }
+    int GetLayerCount() { return Layers.count(); }
 
-    void ReplotSingleLayer(int iLayerIndex=0, bool bUseQueuedReplot=false); //Replot the only one layer of the chart.
+    void ReplotSingleLayer(int iLayerIndex=0, bool bUseQueuedReplot=false); //Replot only one layer of the chart.
     Q_SLOT void Replot(bool bUseQueuedReplot=false); //Replot all the charts.
 
     void SetYAxisRange(int iMin=0, int iMax=100); //Set the range of Y axis
-    void SetLinePlotPen(int iLayerIndex, QPen qpnPen);//Set pen used to plot the data.
+    void SetLinePlotPen(int iLayerIndex, QPen qpnPen); //Set pen used to plot the data.
     void SetAxisPen(QPen qpnPen) { _AxisPen=qpnPen; } //Set pen used to draw the axis.
     void SetGridPen(QPen qpnPen) { _GridPen=qpnPen; } //Set pen used to draw the background grids.
     void SetMargin(int iLeft=20, int iRight=20, int iTop=20, int iBottom=20); //Set the margin of the displayed chart.
 
 private:
-    QVector<QPen> _LinePlotPen; //INTERNAL: The pen used to plot the data.
     QPen _AxisPen; //INTERNAL: The pen used to draw the axis.
     QPen _GridPen; //INTERNAL: The pen used to draw the background grids.
     int _iYAxisMin; //INTERNAL: The minial value of Y axis
@@ -81,11 +99,9 @@ private:
     int _iTopMargin;
     int _iBottomMargin;
 
-    QVector<QPainterPath> _LayerCahce; //INTERNAL: Cache of a layer
-    QVector<bool> _LayerIndexesToReplot; //INTERNAL: Bitmap to indicate layers to replot.
-    bool _IsReplotIndexesDefined; //INTERNAL: Chack whether a bitmap indicating layers to replot has been set.
     bool _IsReplotting; //INTERNAL: Check whether the chart is replotting.
     bool _IsReplotQueued; //INTERNAL: Check whether a replot request is queued.
+    bool _IsReplotIndexesDefined; //INTERNAL: Indicates if a replotting index as been set.
 };
 
 #endif // LINECHART_H

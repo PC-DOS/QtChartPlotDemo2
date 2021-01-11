@@ -26,9 +26,9 @@ void MainWindow::RegenerateXAxisData(){
     for (int i=0; i<datUltrasoud->GetCurrentPointsPerPlot();++i){
         arrXAxis.push_back(double(i)*double(1000)/double(datUltrasoud->GetCurrentSamlingRate()));
     }
-    ui->chrtData->DataBuffer[1]=datUltrasoud->GenerateDAC1();
-    ui->chrtData->DataBuffer[2]=datUltrasoud->GenerateDAC2();
-    ui->chrtData->DataBuffer[3]=datUltrasoud->GenerateDAC3();
+    ui->chrtData->Layers[1].DataBuffer=datUltrasoud->GenerateDAC1();
+    ui->chrtData->Layers[2].DataBuffer=datUltrasoud->GenerateDAC2();
+    ui->chrtData->Layers[3].DataBuffer=datUltrasoud->GenerateDAC3();
     ui->chrtData->Replot(true);
 }
 
@@ -37,7 +37,7 @@ void MainWindow::UpdateAxisData(){
 }
 
 void MainWindow::tmrDataGenerationTimer_Tick(){
-    ui->chrtData->DataBuffer[0]=datUltrasoud->GeneratePlotForTesting();
+    ui->chrtData->Layers[0].DataBuffer=datUltrasoud->GeneratePlotForTesting();
     ui->chrtData->ReplotSingleLayer(0,true);
 #ifdef TIMER_PERFORMANCE_TESTING
     ++iCurrentFrames;
@@ -78,6 +78,7 @@ MainWindow::MainWindow(QWidget *parent) :
 
     //Chart Widget Initialization
     ui->chrtData->SetYAxisRange(0,25);
+    ui->chrtData->Layers[0].IsCachingDisabled=true;
     ui->chrtData->AddLayer(QPen(Qt::red,1));
     ui->chrtData->AddLayer(QPen(Qt::red,1));
     ui->chrtData->AddLayer(QPen(Qt::red,1));
