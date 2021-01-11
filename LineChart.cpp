@@ -1,6 +1,7 @@
 #include "LineChart.h"
 
 LineChart::LineChart(QWidget *parent){
+    setAutoFillBackground(true);
     Layers.push_back(LineChartLayer());
     _AxisPen=QPen(Qt::white,1.5);
     _GridPen=QPen(Qt::white,0.5,Qt::DashLine);
@@ -26,6 +27,7 @@ void LineChart::paintEvent(QPaintEvent *){
     QPoint BottomRight(this->width()-_iRightMargin, this->height()-_iBottomMargin);
 
     QPainter painter(this);
+
     painter.setPen(_AxisPen);
     painter.drawLine(TopLeft, BottomLeft);
     painter.drawLine(BottomLeft, BottomRight);
@@ -71,10 +73,10 @@ void LineChart::paintEvent(QPaintEvent *){
         }
         QPainterPath path;
         QPointF tmp;
-        tmp.setX(_iLeftMargin);
-        tmp.setY(_iTopMargin+chartHeight*(yMax-Layers[iLayerIndex].DataBuffer[0])/yMax);
+        tmp.setX(_iLeftMargin+chartWidth*Layers[iLayerIndex].XAxisClippingBeginPercentage);
+        tmp.setY(_iTopMargin+chartHeight*(yMax-Layers[iLayerIndex].DataBuffer[Layers[iLayerIndex].DataBuffer.count()*Layers[iLayerIndex].XAxisClippingBeginPercentage])/yMax);
         path.moveTo(tmp);
-        for (int i = 1; i < xMax-1; i++){
+        for (int i = Layers[iLayerIndex].DataBuffer.count()*Layers[iLayerIndex].XAxisClippingBeginPercentage; i < xMax*Layers[iLayerIndex].XAxisClippingEndPercentage; ++i){
             tmp.setX(_iLeftMargin+chartWidth*i/xMax);
             tmp.setY(_iTopMargin+chartHeight*(yMax-Layers[iLayerIndex].DataBuffer[i])/yMax);
             path.lineTo(tmp);
@@ -204,6 +206,8 @@ LineChartLayer::LineChartLayer(){
     IsCached=false;
     IsUpdateRequested=true;
     IsForcedUpdateRequested=true;
+    XAxisClippingBeginPercentage=0;
+    XAxisClippingEndPercentage=1;
 }
 
 LineChartLayer::LineChartLayer(QPen qpnPen){
@@ -212,4 +216,6 @@ LineChartLayer::LineChartLayer(QPen qpnPen){
     IsCached=false;
     IsUpdateRequested=true;
     IsForcedUpdateRequested=true;
+    XAxisClippingBeginPercentage=0;
+    XAxisClippingEndPercentage=1;
 }

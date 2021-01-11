@@ -106,6 +106,17 @@ int DataSourceProvider::GetCurrentPointsPerPlot(){
     return _iPointsPerPlot;
 }
 
+void DataSourceProvider::SetGateParameters(int iGateBeginInMillisecond, int iGateEndInMillisecond){
+    _gtpGateInfo.iGateBeginInMillisecond=max(iGateBeginInMillisecond,0);
+    _gtpGateInfo.iGateEndInMillisecond=min(iGateEndInMillisecond,_iCurrentDisplayTimespan);
+    _gtpGateInfo.dGateBeginInPercentage=max(double(iGateBeginInMillisecond)/double(_iCurrentDisplayTimespan),double(0));
+    _gtpGateInfo.dGateEndInPercentage=min(double(iGateEndInMillisecond)/double(_iCurrentDisplayTimespan),double(1));
+}
+
+const GateParameters & DataSourceProvider::GetGateParameters(){
+    return _gtpGateInfo;
+}
+
 QString DataSourceProvider::SamplingRateToString(bool IsUnitTranslationEnabled){
     if (IsUnitTranslationEnabled){
         if (_iCurrentSamplingRate>=UNIT_G){
@@ -184,7 +195,7 @@ QString DataSourceProvider::DisplayTimespanToString(int iDisplayTimespanInMillis
 
 const QVector<double> & DataSourceProvider::GenerateDAC1(){
     _arrDAC1.clear();
-    for (int i=1; i<=_iPointsPerPlot;++i){
+    for (int i=1; i<=_iPointsPerPlot; ++i){
         _arrDAC1.push_back(((double(rand())/double(__INT_MAX__)+5)*_dCurrentGain));
     }
     return _arrDAC1;
@@ -192,7 +203,7 @@ const QVector<double> & DataSourceProvider::GenerateDAC1(){
 
 const QVector<double> & DataSourceProvider::GenerateDAC2(){
     _arrDAC2.clear();
-    for (int i=0; i<_iPointsPerPlot;++i){
+    for (int i=0; i<_iPointsPerPlot; ++i){
         _arrDAC2.push_back(_arrDAC1[i]*2);
     }
     return _arrDAC2;
@@ -200,15 +211,28 @@ const QVector<double> & DataSourceProvider::GenerateDAC2(){
 
 const QVector<double> & DataSourceProvider::GenerateDAC3(){
     _arrDAC3.clear();
-    for (int i=0; i<_iPointsPerPlot;++i){
+    for (int i=0; i<_iPointsPerPlot; ++i){
         _arrDAC3.push_back(_arrDAC1[i]/2);
     }
     return _arrDAC3;
 }
 
+const QVector<double> & DataSourceProvider::GenerateGate(int iGateYValue, int iGateBeginInMillisecond, int iGateEndInMillisecond){
+    _arrGate.clear();
+    _gtpGateInfo.iGateYValue=iGateYValue;
+    _gtpGateInfo.iGateBeginInMillisecond=max(iGateBeginInMillisecond,0);
+    _gtpGateInfo.iGateEndInMillisecond=min(iGateEndInMillisecond,_iCurrentDisplayTimespan);
+    _gtpGateInfo.dGateBeginInPercentage=max(double(iGateBeginInMillisecond)/double(_iCurrentDisplayTimespan),double(0));
+    _gtpGateInfo.dGateEndInPercentage=min(double(iGateEndInMillisecond)/double(_iCurrentDisplayTimespan),double(1));
+    for (int i=1; i<=_iPointsPerPlot; ++i){
+        _arrGate.push_back(iGateYValue);
+    }
+    return _arrGate;
+}
+
 const QVector<double> & DataSourceProvider::GeneratePlotForTesting(){
     _arrData.clear();
-    for (int i=1; i<=_iPointsPerPlot;++i){
+    for (int i=1; i<=_iPointsPerPlot; ++i){
         _arrData.push_back((double(rand())/double(__INT_MAX__)+2.5*sin(5.0*3.1415926*i/_iPointsPerPlot)+5)*_dCurrentGain);
     }
     return _arrData;

@@ -53,6 +53,9 @@ public:
 
     QVector<double> DataBuffer; //Access this member directly to set the data of the layer.
 
+    double XAxisClippingBeginPercentage;
+    double XAxisClippingEndPercentage; //Clipping
+
     bool IsCachingDisabled; //Enable or disable caching.
     bool IsCached; //Indicate if plot data has been cached.
     bool IsUpdateRequested; //Indicate if user has requested an update.
