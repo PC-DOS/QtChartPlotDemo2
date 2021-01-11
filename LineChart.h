@@ -61,7 +61,7 @@ public:
     QPen LinePlotPen; //The pen used to draw the line plot.
 
     //INTERNAL MEMBERS//
-    QPainterPath _PathCache;
+    QPainterPath _PathCache; //Cache
 
 };
 

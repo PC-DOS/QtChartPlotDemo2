@@ -70,7 +70,7 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->prgBattPct->setValue(100);
 
     //Initialize DataSourceProvider
-    datUltrasoud=new DataSourceProvider();
+    datUltrasoud=new DataSourceProvider(100000,2,10);
     smCurrentState=new StateMachine();
     ui->lblSamplingRate->setText(datUltrasoud->SamplingRateToString());
     ui->lblGain->setText(datUltrasoud->GainToString());

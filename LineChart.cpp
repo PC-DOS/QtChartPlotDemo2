@@ -19,6 +19,7 @@ LineChart::~LineChart(){
 }
 
 void LineChart::paintEvent(QPaintEvent *){
+
     QPoint TopLeft(_iLeftMargin, _iTopMargin);
     QPoint TopRight(this->width()-_iRightMargin, _iTopMargin);
     QPoint BottomLeft(_iBottomMargin, this->height()-_iLeftMargin);
