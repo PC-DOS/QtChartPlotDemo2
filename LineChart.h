@@ -72,6 +72,7 @@ public:
     LineChart(QWidget *parent = 0);
     ~LineChart();
     virtual void paintEvent(QPaintEvent *);
+    virtual void resizeEvent();
 
     QVector<LineChartLayer> Layers; //Access this member directly to manipulate the layers of the chart.
 

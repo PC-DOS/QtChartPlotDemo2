@@ -82,7 +82,16 @@ void LineChart::paintEvent(QPaintEvent *){
 
         if (!Layers[iLayerIndex].IsCachingDisabled){
             Layers[iLayerIndex]._PathCache=path;
+            Layers[iLayerIndex].IsCached=true;
         }
+
+        Layers[iLayerIndex].IsForcedUpdateRequested=false;
+    }
+}
+
+void LineChart::resizeEvent(){
+    for (int i=0; i<Layers.count(); ++i){
+        Layers[i].IsForcedUpdateRequested=true;
     }
 }
 
