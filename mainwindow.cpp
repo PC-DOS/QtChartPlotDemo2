@@ -29,9 +29,12 @@ void MainWindow::RegenerateXAxisData(){
     ui->chrtData->Layers[1].DataBuffer=datUltrasoud->GenerateDAC1();
     ui->chrtData->Layers[2].DataBuffer=datUltrasoud->GenerateDAC2();
     ui->chrtData->Layers[3].DataBuffer=datUltrasoud->GenerateDAC3();
-    ui->chrtData->Layers[4].DataBuffer=datUltrasoud->GenerateGate(10,datUltrasoud->GetCurrentDisplayTimespan()*0.4,datUltrasoud->GetCurrentDisplayTimespan()*0.5);
-    ui->chrtData->Layers[4].XAxisClippingBeginPercentage=datUltrasoud->GetGateParameters().dGateBeginInPercentage;
-    ui->chrtData->Layers[4].XAxisClippingEndPercentage=datUltrasoud->GetGateParameters().dGateEndInPercentage;
+    ui->chrtData->Layers[4].DataBuffer=datUltrasoud->GenerateGate1(10,datUltrasoud->GetCurrentDisplayTimespan()*0.4,datUltrasoud->GetCurrentDisplayTimespan()*0.5);
+    ui->chrtData->Layers[4].XAxisClippingBeginPercentage=datUltrasoud->GetGate1Parameters().dGateBeginInPercentage;
+    ui->chrtData->Layers[4].XAxisClippingEndPercentage=datUltrasoud->GetGate1Parameters().dGateEndInPercentage;
+    ui->chrtData->Layers[5].DataBuffer=datUltrasoud->GenerateGate2(9,datUltrasoud->GetCurrentDisplayTimespan()*0.4,datUltrasoud->GetCurrentDisplayTimespan()*0.6);
+    ui->chrtData->Layers[5].XAxisClippingBeginPercentage=datUltrasoud->GetGate2Parameters().dGateBeginInPercentage;
+    ui->chrtData->Layers[5].XAxisClippingEndPercentage=datUltrasoud->GetGate2Parameters().dGateEndInPercentage;
     ui->chrtData->Replot(true);
 }
 
@@ -85,6 +88,7 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->chrtData->AddLayer(QPen(Qt::red,1));
     ui->chrtData->AddLayer(QPen(Qt::red,1));
     ui->chrtData->AddLayer(QPen(Qt::green,3));
+    ui->chrtData->AddLayer(QPen(Qt::cyan,3));
     ui->chrtData->Layers[0].IsCachingDisabled=true;
 
     //Start Timer

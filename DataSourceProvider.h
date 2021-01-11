@@ -26,13 +26,15 @@ private:
     double _dCurrentGain; //In multiples, to generate value in dB, use: dB = 20lg(Multiples)
     int _iCurrentDisplayTimespan;
     int _iPointsPerPlot;
-    GateParameters _gtpGateInfo;
+    GateParameters _gtpGate1Info;
+    GateParameters _gtpGate2Info;
 
     QVector<double> _arrData;
     QVector<double> _arrDAC1;
     QVector<double> _arrDAC2;
     QVector<double> _arrDAC3;
-    QVector<double> _arrGate;
+    QVector<double> _arrGate1;
+    QVector<double> _arrGate2;
 
 public:
     DataSourceProvider();
@@ -51,8 +53,10 @@ public:
     void SetCurrentDisplayTimespan(int iDisplayTimespanInMillisecond);
     int GetCurrentDisplayTimespan();
     int GetCurrentPointsPerPlot();
-    void SetGateParameters(int iGateBeginInMillisecond, int iGateEndInMillisecond);
-    const GateParameters & GetGateParameters();
+    void SetGate1Parameters(int iGateBeginInMillisecond, int iGateEndInMillisecond);
+    const GateParameters & GetGate1Parameters();
+    void SetGate2Parameters(int iGateBeginInMillisecond, int iGateEndInMillisecond);
+    const GateParameters & GetGate2Parameters();
 
     QString SamplingRateToString(bool IsUnitTranslationEnabled=true);
     QString SamplingRateToString(int iSamplingRateInHz, bool IsUnitTranslationEnabled=true);
@@ -65,7 +69,8 @@ public:
     const QVector<double> & GenerateDAC2();
     const QVector<double> & GenerateDAC3();
 
-    const QVector<double> & GenerateGate(int iGateYValue, int iGateBeginInMillisecond, int iGateEndInMillisecond);
+    const QVector<double> & GenerateGate1(int iGateYValue, int iGateBeginInMillisecond, int iGateEndInMillisecond);
+    const QVector<double> & GenerateGate2(int iGateYValue, int iGateBeginInMillisecond, int iGateEndInMillisecond);
 
     const QVector<double> & GeneratePlotForTesting();
 };
