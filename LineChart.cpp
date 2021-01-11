@@ -124,6 +124,8 @@ void LineChart::ReplotSingleLayer(int iLayerIndex, bool bUseQueuedReplot){
     this->update();
 
     _IsReplotting=false;
+
+    _IsReplotIndexesDefined=false;
 }
 
 void LineChart::Replot(bool bUseQueuedReplot){
@@ -199,7 +201,7 @@ LineChartLayer::LineChartLayer(){
     LinePlotPen=QPen(QColor(0,175,245,255),1);
     IsCachingDisabled=false;
     IsCached=false;
-    IsUpdateRequested=false;
+    IsUpdateRequested=true;
     IsForcedUpdateRequested=true;
 }
 
@@ -207,6 +209,6 @@ LineChartLayer::LineChartLayer(QPen qpnPen){
     LinePlotPen=qpnPen;
     IsCachingDisabled=false;
     IsCached=false;
-    IsUpdateRequested=false;
+    IsUpdateRequested=true;
     IsForcedUpdateRequested=true;
 }

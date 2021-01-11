@@ -78,10 +78,10 @@ MainWindow::MainWindow(QWidget *parent) :
 
     //Chart Widget Initialization
     ui->chrtData->SetYAxisRange(0,25);
+    ui->chrtData->AddLayer(QPen(Qt::red,1));
+    ui->chrtData->AddLayer(QPen(Qt::red,1));
+    ui->chrtData->AddLayer(QPen(Qt::red,1));
     ui->chrtData->Layers[0].IsCachingDisabled=true;
-    ui->chrtData->AddLayer(QPen(Qt::red,1));
-    ui->chrtData->AddLayer(QPen(Qt::red,1));
-    ui->chrtData->AddLayer(QPen(Qt::red,1));
 
     //Start Timer
     RegenerateXAxisData();
