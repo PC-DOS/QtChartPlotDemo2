@@ -12,6 +12,8 @@
 #define DATA_DEFAULT_GAIN 2
 #define DATA_DEFAULT_DISPLAY_TIME_SPAN 20
 
+#define DATA_TYPE int
+
 struct GateParameters{
     int iGateYValue;
     int iGateBeginInMillisecond;
@@ -29,12 +31,12 @@ private:
     GateParameters _gtpGate1Info;
     GateParameters _gtpGate2Info;
 
-    QVector<double> _arrData;
-    QVector<double> _arrDAC1;
-    QVector<double> _arrDAC2;
-    QVector<double> _arrDAC3;
-    QVector<double> _arrGate1;
-    QVector<double> _arrGate2;
+    QVector<DATA_TYPE> _arrData;
+    QVector<DATA_TYPE> _arrDAC1;
+    QVector<DATA_TYPE> _arrDAC2;
+    QVector<DATA_TYPE> _arrDAC3;
+    QVector<DATA_TYPE> _arrGate1;
+    QVector<DATA_TYPE> _arrGate2;
 
 public:
     DataSourceProvider();
@@ -65,14 +67,14 @@ public:
     QString DisplayTimespanToString();
     QString DisplayTimespanToString(int iDisplayTimespanInMillisecond);
 
-    const QVector<double> & GenerateDAC1();
-    const QVector<double> & GenerateDAC2();
-    const QVector<double> & GenerateDAC3();
+    const QVector<DATA_TYPE> & GenerateDAC1();
+    const QVector<DATA_TYPE> & GenerateDAC2();
+    const QVector<DATA_TYPE> & GenerateDAC3();
 
-    const QVector<double> & GenerateGate1(int iGateYValue, int iGateBeginInMillisecond, int iGateEndInMillisecond);
-    const QVector<double> & GenerateGate2(int iGateYValue, int iGateBeginInMillisecond, int iGateEndInMillisecond);
+    const QVector<DATA_TYPE> & GenerateGate1(int iGateYValue, int iGateBeginInMillisecond, int iGateEndInMillisecond);
+    const QVector<DATA_TYPE> & GenerateGate2(int iGateYValue, int iGateBeginInMillisecond, int iGateEndInMillisecond);
 
-    const QVector<double> & GeneratePlotForTesting();
+    const QVector<DATA_TYPE> & GeneratePlotForTesting();
 };
 
 #endif // DATASOURCEPROVIDER_H

@@ -51,7 +51,7 @@ public:
     LineChartLayer();
     LineChartLayer(QPen qpnPen);
 
-    QVector<double> DataBuffer; //Access this member directly to set the data of the layer.
+    QVector<int> DataBuffer; //Access this member directly to set the data of the layer.
 
     double XAxisClippingBeginPercentage;
     double XAxisClippingEndPercentage; //Clipping
