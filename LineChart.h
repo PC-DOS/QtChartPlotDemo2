@@ -56,6 +56,7 @@ public:
     double XAxisClippingBeginPercentage;
     double XAxisClippingEndPercentage; //Clipping
 
+    bool IsVisible; //Indicate if this layer is visible.
     bool IsCachingDisabled; //Enable or disable caching.
     bool IsCached; //Indicate if plot data has been cached.
     bool IsUpdateRequested; //Indicate if user has requested an update.
@@ -91,6 +92,7 @@ public:
     void SetAxisPen(QPen qpnPen) { _AxisPen=qpnPen; } //Set pen used to draw the axis.
     void SetGridPen(QPen qpnPen) { _GridPen=qpnPen; } //Set pen used to draw the background grids.
     void SetMargin(int iLeft=20, int iRight=20, int iTop=20, int iBottom=20); //Set the margin of the displayed chart.
+    void SetInversedPlotSequence(bool IsPlotSequenceInversed=false) {_IsPlotSequenceInversed=IsPlotSequenceInversed;} //Set if the plot sequence is inversed. By default, the Widget will plot layers from LayerID 0, but ifIsPlotSequenceInversed is set to True, the plot will start from the layer with the max LayerID.
 
 private:
     QPen _AxisPen; //INTERNAL: The pen used to draw the axis.
@@ -106,6 +108,7 @@ private:
     bool _IsReplotting; //INTERNAL: Check whether the chart is replotting.
     bool _IsReplotQueued; //INTERNAL: Check whether a replot request is queued.
     bool _IsReplotIndexesDefined; //INTERNAL: Indicates if a replotting index as been set.
+    bool _IsPlotSequenceInversed;
 };
 
 #endif // LINECHART_H

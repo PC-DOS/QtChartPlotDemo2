@@ -13,6 +13,7 @@ LineChart::LineChart(QWidget *parent){
     _iBottomMargin=20;
     _IsReplotting=false;
     _IsReplotQueued=false;
+    _IsPlotSequenceInversed=false;
 }
 
 LineChart::~LineChart(){
@@ -58,8 +59,12 @@ void LineChart::paintEvent(QPaintEvent *){
         return;
     }
 
-    for (int iLayerIndex=0; iLayerIndex<Layers.count(); ++iLayerIndex){
+    for (int iLayerIndexFake=0; iLayerIndexFake<Layers.count(); ++iLayerIndexFake){
+        int iLayerIndex = _IsPlotSequenceInversed?Layers.count()-1-iLayerIndexFake:iLayerIndexFake;
         if (0==Layers.at(iLayerIndex).DataBuffer.count()){
+            continue;
+        }
+        if (!Layers.at(iLayerIndex).IsVisible){
             continue;
         }
         painter.setPen(Layers.at(iLayerIndex).LinePlotPen);
@@ -202,6 +207,7 @@ void LineChart::SetMargin(int iLeft, int iRight, int iTop, int iBottom){
 
 LineChartLayer::LineChartLayer(){
     LinePlotPen=QPen(QColor(0,175,245,255),1);
+    IsVisible=true;
     IsCachingDisabled=false;
     IsCached=false;
     IsUpdateRequested=true;
@@ -212,6 +218,7 @@ LineChartLayer::LineChartLayer(){
 
 LineChartLayer::LineChartLayer(QPen qpnPen){
     LinePlotPen=qpnPen;
+    IsVisible=true;
     IsCachingDisabled=false;
     IsCached=false;
     IsUpdateRequested=true;
