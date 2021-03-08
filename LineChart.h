@@ -75,14 +75,14 @@ class LineChart : public QWidget {
 public:
     LineChart(QWidget *parent = 0);
     ~LineChart();
-    virtual void paintEvent(QPaintEvent *);
-    virtual void resizeEvent();
+    virtual void paintEvent(QPaintEvent *); //MAIN FUNTION: We draw our charts in this function.
+    virtual void resizeEvent(); //Force an update if size changed.
 
     QVector<LineChartLayer> Layers; //Access this member directly to manipulate the layers of the chart.
 
-    void AddLayer(QPen qpnLinePlotPen=QPen(QColor(0,175,245,255),1));
-    void RemoveLayer(int iLayerIndex);
-    int GetLayerCount() { return Layers.count(); }
+    void AddLayer(QPen qpnLinePlotPen=QPen(QColor(0,175,245,255),1)); //Add a layer
+    void RemoveLayer(int iLayerIndex); //Remove a layer
+    int GetLayerCount() { return Layers.count(); } //Report layer count
 
     void ReplotSingleLayer(int iLayerIndex=0, bool bUseQueuedReplot=false); //Replot only one layer of the chart.
     Q_SLOT void Replot(bool bUseQueuedReplot=false); //Replot all the charts.
@@ -92,7 +92,7 @@ public:
     void SetAxisPen(QPen qpnPen) { _AxisPen=qpnPen; } //Set pen used to draw the axis.
     void SetGridPen(QPen qpnPen) { _GridPen=qpnPen; } //Set pen used to draw the background grids.
     void SetMargin(int iLeft=20, int iRight=20, int iTop=20, int iBottom=20); //Set the margin of the displayed chart.
-    void SetInversedPlotSequence(bool IsPlotSequenceInversed=false) {_IsPlotSequenceInversed=IsPlotSequenceInversed;} //Set if the plot sequence is inversed. By default, the Widget will plot layers from LayerID 0, but ifIsPlotSequenceInversed is set to True, the plot will start from the layer with the max LayerID.
+    void SetInversedPlotSequence(bool IsPlotSequenceInversed=false) {_IsPlotSequenceInversed=IsPlotSequenceInversed;} //Set if the plotting sequence is inversed. By default, the Widget will plot layers from LayerID 0, but ifIsPlotSequenceInversed is set to True, the plot will start from the layer with the max LayerID.
 
 private:
     QPen _AxisPen; //INTERNAL: The pen used to draw the axis.
@@ -108,7 +108,7 @@ private:
     bool _IsReplotting; //INTERNAL: Check whether the chart is replotting.
     bool _IsReplotQueued; //INTERNAL: Check whether a replot request is queued.
     bool _IsReplotIndexesDefined; //INTERNAL: Indicates if a replotting index as been set.
-    bool _IsPlotSequenceInversed;
+    bool _IsPlotSequenceInversed; //INTERNAL: Indicates if an inversed plotting sequence is set.
 };
 
 #endif // LINECHART_H

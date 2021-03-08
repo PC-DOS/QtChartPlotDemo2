@@ -22,6 +22,7 @@ LineChart::~LineChart(){
 
 void LineChart::paintEvent(QPaintEvent *){
 
+    /* Calculate canvas */
     QPoint TopLeft(_iLeftMargin, _iTopMargin);
     QPoint TopRight(this->width()-_iRightMargin, _iTopMargin);
     QPoint BottomLeft(_iBottomMargin, this->height()-_iLeftMargin);
@@ -29,12 +30,14 @@ void LineChart::paintEvent(QPaintEvent *){
 
     QPainter painter(this);
 
+    /* Draw axis */
     painter.setPen(_AxisPen);
     painter.drawLine(TopLeft, BottomLeft);
     painter.drawLine(BottomLeft, BottomRight);
     painter.drawLine(TopLeft,TopRight);
     painter.drawLine(TopRight,BottomRight);
 
+    /* Draw grid */
     painter.setPen(_GridPen);
     if (this->width()>200)
     {
@@ -55,16 +58,18 @@ void LineChart::paintEvent(QPaintEvent *){
         }
     }
 
+    /* Check if there is no layers */
     if (0==Layers.count()){
         return;
     }
 
+    /* Draw every layer */
     for (int iLayerIndexFake=0; iLayerIndexFake<Layers.count(); ++iLayerIndexFake){
-        int iLayerIndex = _IsPlotSequenceInversed?Layers.count()-1-iLayerIndexFake:iLayerIndexFake;
-        if (0==Layers.at(iLayerIndex).DataBuffer.count()){
+        int iLayerIndex = _IsPlotSequenceInversed?Layers.count()-1-iLayerIndexFake:iLayerIndexFake; //Calculate the real layer index.
+        if (0==Layers.at(iLayerIndex).DataBuffer.count()){ //Check if we have data.
             continue;
         }
-        if (!Layers.at(iLayerIndex).IsVisible){
+        if (!Layers.at(iLayerIndex).IsVisible){ //Skip invisible layers.
             continue;
         }
         painter.setPen(Layers.at(iLayerIndex).LinePlotPen);
@@ -73,7 +78,7 @@ void LineChart::paintEvent(QPaintEvent *){
         int yMax = _iYAxisMax-_iYAxisMin;
         int xMax = Layers.at(iLayerIndex).DataBuffer.count();
         if (!Layers.at(iLayerIndex).IsCachingDisabled && !Layers.at(iLayerIndex).IsUpdateRequested && !Layers.at(iLayerIndex).IsForcedUpdateRequested && Layers.at(iLayerIndex).IsCached){ //Load buffer for unchanged layers
-            painter.drawPath(Layers.at(iLayerIndex)._PathCache);
+            painter.drawPath(Layers.at(iLayerIndex)._PathCache); //If an up-to-date cache is available, draw it.
             continue;
         }
         QPainterPath path;
@@ -88,7 +93,7 @@ void LineChart::paintEvent(QPaintEvent *){
         }
         painter.drawPath(path);
 
-        if (!Layers.at(iLayerIndex).IsCachingDisabled){
+        if (!Layers.at(iLayerIndex).IsCachingDisabled){ //Save path to cache
             Layers[iLayerIndex]._PathCache=path;
             Layers[iLayerIndex].IsCached=true;
         }
@@ -97,12 +102,18 @@ void LineChart::paintEvent(QPaintEvent *){
     }
 }
 
-void LineChart::resizeEvent(){
+void LineChart::resizeEvent(){ //If size changed, force a full update
     for (int i=0; i<Layers.count(); ++i){
         Layers[i].IsForcedUpdateRequested=true;
     }
 }
 
+/*
+ * Replot a single layer, specify the index of the layer in iLayerIndex
+ *
+ * Set bUseQueuedReplot to true, and the replot will be queued in the next event loop. Use this for better performance.
+ * Ref. QCustomPlot
+ */
 void LineChart::ReplotSingleLayer(int iLayerIndex, bool bUseQueuedReplot){
     _IsReplotIndexesDefined=false;
     for (int i=0;i<Layers.count();++i){
