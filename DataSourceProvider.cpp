@@ -207,7 +207,7 @@ QString DataSourceProvider::DisplayTimespanToString(int iDisplayTimespanInMillis
 const QVector<DATA_TYPE> & DataSourceProvider::GenerateDAC1(){
     _arrDAC1.clear();
     for (int i=1; i<=_iPointsPerPlot; ++i){
-        _arrDAC1.push_back(((double(rand())/double(__INT_MAX__)+5)*_dCurrentGain));
+        _arrDAC1.push_back(((double(rand())/double(__INT_MAX__)*10+50)*_dCurrentGain));
     }
     return _arrDAC1;
 }
@@ -257,7 +257,7 @@ const QVector<DATA_TYPE> & DataSourceProvider::GenerateGate2(int iGateYValue, in
 const QVector<DATA_TYPE> & DataSourceProvider::GeneratePlotForTesting(){
     _arrData.clear();
     for (int i=1; i<=_iPointsPerPlot; ++i){
-        _arrData.push_back((double(rand())/double(__INT_MAX__)+2.5*sin(5.0*3.1415926*i/_iPointsPerPlot)+5)*_dCurrentGain);
+        _arrData.push_back((double(rand())/double(__INT_MAX__)+40*sin(5.0*3.1415926*i/_iPointsPerPlot)+100)*_dCurrentGain);
     }
     return _arrData;
 }

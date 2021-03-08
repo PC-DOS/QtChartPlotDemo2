@@ -11,6 +11,7 @@
 class StateMachine{
 private:
     int _iCurrentState;
+    int _iLastState;
 
 public:
     StateMachine();
@@ -18,6 +19,7 @@ public:
 
     void SetCurrentState(int iNewState);
     int GetCurrentState();
+    void RevertToLastState();
 };
 
 #endif // STATEMACHINE_H

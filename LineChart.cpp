@@ -59,31 +59,31 @@ void LineChart::paintEvent(QPaintEvent *){
     }
 
     for (int iLayerIndex=0; iLayerIndex<Layers.count(); ++iLayerIndex){
-        if (0==Layers[iLayerIndex].DataBuffer.count()){
+        if (0==Layers.at(iLayerIndex).DataBuffer.count()){
             continue;
         }
-        painter.setPen(Layers[iLayerIndex].LinePlotPen);
+        painter.setPen(Layers.at(iLayerIndex).LinePlotPen);
         int chartWidth = this->width()-_iLeftMargin-_iRightMargin;
         int chartHeight = this->height()-_iTopMargin-_iBottomMargin;
         int yMax = _iYAxisMax-_iYAxisMin;
-        int xMax = Layers[iLayerIndex].DataBuffer.count();
-        if (!Layers[iLayerIndex].IsCachingDisabled && !Layers[iLayerIndex].IsUpdateRequested && !Layers[iLayerIndex].IsForcedUpdateRequested && Layers[iLayerIndex].IsCached){ //Load buffer for unchanged layers
-            painter.drawPath(Layers[iLayerIndex]._PathCache);
+        int xMax = Layers.at(iLayerIndex).DataBuffer.count();
+        if (!Layers.at(iLayerIndex).IsCachingDisabled && !Layers.at(iLayerIndex).IsUpdateRequested && !Layers.at(iLayerIndex).IsForcedUpdateRequested && Layers.at(iLayerIndex).IsCached){ //Load buffer for unchanged layers
+            painter.drawPath(Layers.at(iLayerIndex)._PathCache);
             continue;
         }
         QPainterPath path;
         QPointF tmp;
-        tmp.setX(_iLeftMargin+chartWidth*Layers[iLayerIndex].XAxisClippingBeginPercentage);
-        tmp.setY(_iTopMargin+chartHeight*(yMax-Layers[iLayerIndex].DataBuffer[Layers[iLayerIndex].DataBuffer.count()*Layers[iLayerIndex].XAxisClippingBeginPercentage])/yMax);
+        tmp.setX(_iLeftMargin+chartWidth*Layers.at(iLayerIndex).XAxisClippingBeginPercentage);
+        tmp.setY(_iTopMargin+chartHeight*(yMax-Layers.at(iLayerIndex).DataBuffer.at(Layers.at(iLayerIndex).DataBuffer.count()*Layers.at(iLayerIndex).XAxisClippingBeginPercentage))/yMax);
         path.moveTo(tmp);
-        for (int i = Layers[iLayerIndex].DataBuffer.count()*Layers[iLayerIndex].XAxisClippingBeginPercentage; i < xMax*Layers[iLayerIndex].XAxisClippingEndPercentage; ++i){
+        for (int i = Layers.at(iLayerIndex).DataBuffer.count()*Layers.at(iLayerIndex).XAxisClippingBeginPercentage; i < xMax*Layers.at(iLayerIndex).XAxisClippingEndPercentage; ++i){
             tmp.setX(_iLeftMargin+chartWidth*i/xMax);
-            tmp.setY(_iTopMargin+chartHeight*(yMax-Layers[iLayerIndex].DataBuffer[i])/yMax);
+            tmp.setY(_iTopMargin+chartHeight*(yMax-Layers.at(iLayerIndex).DataBuffer.at(i))/yMax);
             path.lineTo(tmp);
         }
         painter.drawPath(path);
 
-        if (!Layers[iLayerIndex].IsCachingDisabled){
+        if (!Layers.at(iLayerIndex).IsCachingDisabled){
             Layers[iLayerIndex]._PathCache=path;
             Layers[iLayerIndex].IsCached=true;
         }
