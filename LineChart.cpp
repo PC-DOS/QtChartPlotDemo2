@@ -173,8 +173,8 @@ void LineChart::Replot(bool bUseQueuedReplot){
     bIsReplotting=false;
 }
 
-void LineChart::AddLayer(QPen qpnLinePlotPen){
-    Layers.push_back(LineChartLayer(qpnLinePlotPen));
+void LineChart::AddLayer(QPen qpnLinePlotPenInit){
+    Layers.push_back(LineChartLayer(qpnLinePlotPenInit));
 }
 
 void LineChart::RemoveLayer(int iLayerIndex){
@@ -183,37 +183,37 @@ void LineChart::RemoveLayer(int iLayerIndex){
     }
 }
 
-void LineChart::SetYAxisRange(int iMin, int iMax){
-    if (iMax<=iMin){
-        iMax=iMin+1;
+void LineChart::SetYAxisRange(int iMinNew, int iMaxNew){
+    if (iMaxNew<=iMinNew){
+        iMaxNew=iMinNew+1;
     }
-    iYAxisMin=iMin;
-    iYAxisMax=iMax;
+    iYAxisMin=iMinNew;
+    iYAxisMax=iMaxNew;
 }
 
-void LineChart::SetLinePlotPen(int iLayerIndex, QPen qpnPen){
+void LineChart::SetLinePlotPen(int iLayerIndex, QPen qpnPenNew){
     if (iLayerIndex>=0 && iLayerIndex<Layers.count()){
-        Layers[iLayerIndex].qpnLinePlotPen=qpnPen;
+        Layers[iLayerIndex].qpnLinePlotPen=qpnPenNew;
     }
 }
 
-void LineChart::SetMargin(int iLeft, int iRight, int iTop, int iBottom){
-    if (iLeft<0){
-        iLeft=0;
+void LineChart::SetMargin(int iLeftNew, int iRightNew, int iTopNew, int iBottomNew){
+    if (iLeftNew<0){
+        iLeftNew=0;
     }
-    if (iRight<0){
-        iRight=0;
+    if (iRightNew<0){
+        iRightNew=0;
     }
-    if (iTop<0){
-        iTop=0;
+    if (iTopNew<0){
+        iTopNew=0;
     }
-    if (iBottom<0){
-        iBottom=0;
+    if (iBottomNew<0){
+        iBottomNew=0;
     }
-    iLeftMargin=iLeft;
-    iRightMargin=iRight;
-    iTopMargin=iTop;
-    iBottomMargin=iBottom;
+    iLeftMargin=iLeftNew;
+    iRightMargin=iRightNew;
+    iTopMargin=iTopNew;
+    iBottomMargin=iBottomNew;
 }
 
 LineChartLayer::LineChartLayer(){

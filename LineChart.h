@@ -79,18 +79,18 @@ public:
 
     QVector<LineChartLayer> Layers; //Access this member directly to manipulate the layers of the chart.
 
-    void AddLayer(QPen qpnLinePlotPen=QPen(QColor(0,175,245,255),1)); //Add a layer
+    void AddLayer(QPen qpnLinePlotPenInit=QPen(QColor(0,175,245,255),1)); //Add a layer
     void RemoveLayer(int iLayerIndex); //Remove a layer
     int GetLayerCount() { return Layers.count(); } //Report layer count
 
     void ReplotSingleLayer(int iLayerIndex=0, bool bUseQueuedReplot=false); //Replot only one layer of the chart.
     Q_SLOT void Replot(bool bUseQueuedReplot=false); //Replot all the charts.
 
-    void SetYAxisRange(int iMin=0, int iMax=100); //Set the range of Y axis
-    void SetLinePlotPen(int iLayerIndex, QPen qpnPen); //Set pen used to plot the data.
-    void SetAxisPen(QPen qpnPen) { qpnAxisPen=qpnPen; } //Set pen used to draw the axis.
-    void SetGridPen(QPen qpnPen) { qpnGridPen=qpnPen; } //Set pen used to draw the background grids.
-    void SetMargin(int iLeft=20, int iRight=20, int iTop=20, int iBottom=20); //Set the margin of the displayed chart.
+    void SetYAxisRange(int iMinNew=0, int iMaxNew=100); //Set the range of Y axis
+    void SetLinePlotPen(int iLayerIndex, QPen qpnPenNew); //Set pen used to plot the data.
+    void SetAxisPen(QPen qpnPenNew) { qpnAxisPen=qpnPenNew; } //Set pen used to draw the axis.
+    void SetGridPen(QPen qpnPenNew) { qpnGridPen=qpnPenNew; } //Set pen used to draw the background grids.
+    void SetMargin(int iLeftNew=20, int iRightNew=20, int iTopNew=20, int iBottomNew=20); //Set the margin of the displayed chart.
     void SetInversedPlotSequence(bool bIsPlotSequenceInversedNew=false) {bIsPlotSequenceInversed=bIsPlotSequenceInversedNew;} //Set if the plotting sequence is inversed. By default, the Widget will plot layers from LayerID 0, but ifIsPlotSequenceInversed is set to True, the plot will start from the layer with the max LayerID.
 
 private:
