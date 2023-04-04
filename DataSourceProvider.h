@@ -24,19 +24,19 @@ struct GateParameters{
 
 class DataSourceProvider{
 private:
-    int _iCurrentSamplingRate;
-    double _dCurrentGain; //In multiples, to generate value in dB, use: dB = 20lg(Multiples)
-    int _iCurrentDisplayTimespan;
-    int _iPointsPerPlot;
-    GateParameters _gtpGate1Info;
-    GateParameters _gtpGate2Info;
+    int iCurrentSamplingRate;
+    double dCurrentGain; //In multiples, to generate value in dB, use: dB = 20lg(Multiples)
+    int iCurrentDisplayTimespan;
+    int iPointsPerPlot;
+    GateParameters gtpGate1Info;
+    GateParameters gtpGate2Info;
 
-    QVector<DATA_TYPE> _arrData;
-    QVector<DATA_TYPE> _arrDAC1;
-    QVector<DATA_TYPE> _arrDAC2;
-    QVector<DATA_TYPE> _arrDAC3;
-    QVector<DATA_TYPE> _arrGate1;
-    QVector<DATA_TYPE> _arrGate2;
+    QVector<DATA_TYPE> arrData;
+    QVector<DATA_TYPE> arrDAC1;
+    QVector<DATA_TYPE> arrDAC2;
+    QVector<DATA_TYPE> arrDAC3;
+    QVector<DATA_TYPE> arrGate1;
+    QVector<DATA_TYPE> arrGate2;
 
 public:
     DataSourceProvider();
@@ -60,10 +60,10 @@ public:
     void SetGate2Parameters(int iGateBeginInMillisecond, int iGateEndInMillisecond);
     const GateParameters & GetGate2Parameters();
 
-    QString SamplingRateToString(bool IsUnitTranslationEnabled=true);
-    QString SamplingRateToString(int iSamplingRateInHz, bool IsUnitTranslationEnabled=true);
-    QString GainToString(bool IsDbEnabled=true, bool IsDbOnly=false);
-    QString GainToString(double dGainInMultiple, bool IsDbEnabled=true, bool IsDbOnly=false);
+    QString SamplingRateToString(bool bIsUnitTranslationEnabled=true);
+    QString SamplingRateToString(int iSamplingRateInHz, bool bIsUnitTranslationEnabled=true);
+    QString GainToString(bool bIsDbEnabled=true, bool bIsDbOnly=false);
+    QString GainToString(double dGainInMultiple, bool bIsDbEnabled=true, bool bIsDbOnly=false);
     QString DisplayTimespanToString();
     QString DisplayTimespanToString(int iDisplayTimespanInMillisecond);
 

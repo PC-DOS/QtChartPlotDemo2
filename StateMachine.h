@@ -10,8 +10,8 @@
 
 class StateMachine{
 private:
-    int _iCurrentState;
-    int _iLastState;
+    int iCurrentState;
+    int iLastState;
 
 public:
     StateMachine();

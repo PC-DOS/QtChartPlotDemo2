@@ -49,23 +49,22 @@
 class LineChartLayer{
 public:
     LineChartLayer();
-    LineChartLayer(QPen qpnPen);
+    LineChartLayer(QPen qpnPenInit);
 
-    QVector<int> DataBuffer; //Access this member directly to set the data of the layer.
+    QVector<int> arrDataBuffer; //Access this member directly to set the data of the layer.
 
-    double XAxisClippingBeginPercentage;
-    double XAxisClippingEndPercentage; //Clipping
+    double dXAxisClippingBeginPercentage;
+    double dXAxisClippingEndPercentage; //Clipping
 
-    bool IsVisible; //Indicate if this layer is visible.
-    bool IsCachingDisabled; //Enable or disable caching.
-    bool IsCached; //Indicate if plot data has been cached.
-    bool IsUpdateRequested; //Indicate if user has requested an update.
-    bool IsForcedUpdateRequested; //Indicate if it's necessary to update this layer, including the cache. For example, a size change.
+    bool bIsVisible; //Indicate if this layer is visible.
+    bool bIsCachingDisabled; //Enable or disable caching.
+    bool bIsCached; //Indicate if plot data has been cached.
+    bool bIsUpdateRequested; //Indicate if user has requested an update.
+    bool bIsForcedUpdateRequested; //Indicate if it's necessary to update this layer, including the cache. For example, a size change.
 
-    QPen LinePlotPen; //The pen used to draw the line plot.
+    QPen qpnLinePlotPen; //The pen used to draw the line plot.
 
-    //INTERNAL MEMBERS//
-    QPainterPath _PathCache; //Cache
+    QPainterPath cchPathCache; //Cache
 
 };
 
@@ -89,26 +88,26 @@ public:
 
     void SetYAxisRange(int iMin=0, int iMax=100); //Set the range of Y axis
     void SetLinePlotPen(int iLayerIndex, QPen qpnPen); //Set pen used to plot the data.
-    void SetAxisPen(QPen qpnPen) { _AxisPen=qpnPen; } //Set pen used to draw the axis.
-    void SetGridPen(QPen qpnPen) { _GridPen=qpnPen; } //Set pen used to draw the background grids.
+    void SetAxisPen(QPen qpnPen) { qpnAxisPen=qpnPen; } //Set pen used to draw the axis.
+    void SetGridPen(QPen qpnPen) { qpnGridPen=qpnPen; } //Set pen used to draw the background grids.
     void SetMargin(int iLeft=20, int iRight=20, int iTop=20, int iBottom=20); //Set the margin of the displayed chart.
-    void SetInversedPlotSequence(bool IsPlotSequenceInversed=false) {_IsPlotSequenceInversed=IsPlotSequenceInversed;} //Set if the plotting sequence is inversed. By default, the Widget will plot layers from LayerID 0, but ifIsPlotSequenceInversed is set to True, the plot will start from the layer with the max LayerID.
+    void SetInversedPlotSequence(bool bIsPlotSequenceInversedNew=false) {bIsPlotSequenceInversed=bIsPlotSequenceInversedNew;} //Set if the plotting sequence is inversed. By default, the Widget will plot layers from LayerID 0, but ifIsPlotSequenceInversed is set to True, the plot will start from the layer with the max LayerID.
 
 private:
-    QPen _AxisPen; //INTERNAL: The pen used to draw the axis.
-    QPen _GridPen; //INTERNAL: The pen used to draw the background grids.
-    int _iYAxisMin; //INTERNAL: The minial value of Y axis
-    int _iYAxisMax; //INTERNAL: The maximum value of Y axis
+    QPen qpnAxisPen; //INTERNAL: The pen used to draw the axis.
+    QPen qpnGridPen; //INTERNAL: The pen used to draw the background grids.
+    int iYAxisMin; //INTERNAL: The minial value of Y axis
+    int iYAxisMax; //INTERNAL: The maximum value of Y axis
 
-    int _iLeftMargin; //INTERNAL: Margins
-    int _iRightMargin;
-    int _iTopMargin;
-    int _iBottomMargin;
+    int iLeftMargin; //INTERNAL: Margins
+    int iRightMargin;
+    int iTopMargin;
+    int iBottomMargin;
 
-    bool _IsReplotting; //INTERNAL: Check whether the chart is replotting.
-    bool _IsReplotQueued; //INTERNAL: Check whether a replot request is queued.
-    bool _IsReplotIndexesDefined; //INTERNAL: Indicates if a replotting index as been set.
-    bool _IsPlotSequenceInversed; //INTERNAL: Indicates if an inversed plotting sequence is set.
+    bool bIsReplotting; //INTERNAL: Check whether the chart is replotting.
+    bool bIsReplotQueued; //INTERNAL: Check whether a replot request is queued.
+    bool bIsReplotIndexesDefined; //INTERNAL: Indicates if a replotting index as been set.
+    bool bIsPlotSequenceInversed; //INTERNAL: Indicates if an inversed plotting sequence is set.
 };
 
 #endif // LINECHART_H

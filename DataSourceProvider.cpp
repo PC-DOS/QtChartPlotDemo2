@@ -12,10 +12,10 @@ DataSourceProvider::DataSourceProvider(){
         <<", Timespan="<<qPrintable(DisplayTimespanToString(DATA_DEFAULT_DISPLAY_TIME_SPAN))
         <<", Gain="<<qPrintable(GainToString(double(DATA_DEFAULT_GAIN),true,false))<<"."
         <<endl;
-    _iCurrentSamplingRate=DATA_DEFAULT_SAMPLING_RATE;
-    _dCurrentGain=DATA_DEFAULT_GAIN;
-    _iCurrentDisplayTimespan=DATA_DEFAULT_DISPLAY_TIME_SPAN;
-    _iPointsPerPlot=(double(_iCurrentDisplayTimespan)/double(1000))*_iCurrentSamplingRate;
+    iCurrentSamplingRate=DATA_DEFAULT_SAMPLING_RATE;
+    dCurrentGain=DATA_DEFAULT_GAIN;
+    iCurrentDisplayTimespan=DATA_DEFAULT_DISPLAY_TIME_SPAN;
+    iPointsPerPlot=(double(iCurrentDisplayTimespan)/double(1000))*iCurrentSamplingRate;
     //TODO: Drivers
 }
 
@@ -33,10 +33,10 @@ DataSourceProvider::DataSourceProvider(int iSamplingRateInHz, double dGainInMult
         cerr<<"DataSourceProvider: Invalid display timespan, using default value "<<qPrintable(DisplayTimespanToString(DATA_DEFAULT_DISPLAY_TIME_SPAN))<<"."<<endl;
         iDisplayTimespanInMillisecond=DATA_DEFAULT_DISPLAY_TIME_SPAN;
     }
-    _iCurrentSamplingRate=iSamplingRateInHz;
-    _dCurrentGain=dGainInMultiple;
-    _iCurrentDisplayTimespan=iDisplayTimespanInMillisecond;
-    _iPointsPerPlot=(double(_iCurrentDisplayTimespan)/double(1000))*_iCurrentSamplingRate;
+    iCurrentSamplingRate=iSamplingRateInHz;
+    dCurrentGain=dGainInMultiple;
+    iCurrentDisplayTimespan=iDisplayTimespanInMillisecond;
+    iPointsPerPlot=(double(iCurrentDisplayTimespan)/double(1000))*iCurrentSamplingRate;
     //TODO: Drivers
 }
 
@@ -61,12 +61,12 @@ void DataSourceProvider::SetCurrentSamplingRate(int iSamplingRateInHz){
         cerr<<"DataSourceProvider: Invalid sampling rate, using default value 100 Hz."<<endl;
         iSamplingRateInHz=100;
     }
-    _iCurrentSamplingRate=iSamplingRateInHz;
-    _iPointsPerPlot=(double(_iCurrentDisplayTimespan)/double(1000))*_iCurrentSamplingRate;
+    iCurrentSamplingRate=iSamplingRateInHz;
+    iPointsPerPlot=(double(iCurrentDisplayTimespan)/double(1000))*iCurrentSamplingRate;
 }
 
 int DataSourceProvider::GetCurrentSamlingRate(){
-    return _iCurrentSamplingRate;
+    return iCurrentSamplingRate;
 }
 
 void DataSourceProvider::SetCurrentGainInMultiple(double dGainInMultiple){
@@ -74,19 +74,19 @@ void DataSourceProvider::SetCurrentGainInMultiple(double dGainInMultiple){
         cerr<<"DataSourceProvider: Invalid gain, using default value 6.02 dB (x2)."<<endl;
         dGainInMultiple=2;
     }
-    _dCurrentGain=dGainInMultiple;
+    dCurrentGain=dGainInMultiple;
 }
 
 double DataSourceProvider::GetCurrentGainInMultiple(){
-    return _dCurrentGain;
+    return dCurrentGain;
 }
 
 void DataSourceProvider::SetCurrentGainInDb(double dGainInDb){
-    _dCurrentGain=DbToMultiple(dGainInDb);
+    dCurrentGain=DbToMultiple(dGainInDb);
 }
 
 double DataSourceProvider::GetCurrentGainInDb(){
-    return MultipleToDb(_dCurrentGain);
+    return MultipleToDb(dCurrentGain);
 }
 
 void DataSourceProvider::SetCurrentDisplayTimespan(int iDisplayTimespanInMillisecond){
@@ -94,63 +94,63 @@ void DataSourceProvider::SetCurrentDisplayTimespan(int iDisplayTimespanInMillise
         cerr<<"DataSourceProvider: Invalid display timespan, using default value 1000 ms."<<endl;
         iDisplayTimespanInMillisecond=1000;
     }
-    _iCurrentDisplayTimespan=iDisplayTimespanInMillisecond;
-    _iPointsPerPlot=(double(_iCurrentDisplayTimespan)/double(1000))*_iCurrentSamplingRate;
+    iCurrentDisplayTimespan=iDisplayTimespanInMillisecond;
+    iPointsPerPlot=(double(iCurrentDisplayTimespan)/double(1000))*iCurrentSamplingRate;
 }
 
 int DataSourceProvider::GetCurrentDisplayTimespan(){
-    return _iCurrentDisplayTimespan;
+    return iCurrentDisplayTimespan;
 }
 
 int DataSourceProvider::GetCurrentPointsPerPlot(){
-    return _iPointsPerPlot;
+    return iPointsPerPlot;
 }
 
 void DataSourceProvider::SetGate1Parameters(int iGateBeginInMillisecond, int iGateEndInMillisecond){
-    _gtpGate1Info.iGateBeginInMillisecond=max(iGateBeginInMillisecond,0);
-    _gtpGate1Info.iGateEndInMillisecond=min(iGateEndInMillisecond,_iCurrentDisplayTimespan);
-    _gtpGate1Info.dGateBeginInPercentage=max(double(iGateBeginInMillisecond)/double(_iCurrentDisplayTimespan),double(0));
-    _gtpGate1Info.dGateEndInPercentage=min(double(iGateEndInMillisecond)/double(_iCurrentDisplayTimespan),double(1));
+    gtpGate1Info.iGateBeginInMillisecond=max(iGateBeginInMillisecond,0);
+    gtpGate1Info.iGateEndInMillisecond=min(iGateEndInMillisecond,iCurrentDisplayTimespan);
+    gtpGate1Info.dGateBeginInPercentage=max(double(iGateBeginInMillisecond)/double(iCurrentDisplayTimespan),double(0));
+    gtpGate1Info.dGateEndInPercentage=min(double(iGateEndInMillisecond)/double(iCurrentDisplayTimespan),double(1));
 }
 
 const GateParameters & DataSourceProvider::GetGate1Parameters(){
-    return _gtpGate1Info;
+    return gtpGate1Info;
 }
 
 void DataSourceProvider::SetGate2Parameters(int iGateBeginInMillisecond, int iGateEndInMillisecond){
-    _gtpGate2Info.iGateBeginInMillisecond=max(iGateBeginInMillisecond,0);
-    _gtpGate2Info.iGateEndInMillisecond=min(iGateEndInMillisecond,_iCurrentDisplayTimespan);
-    _gtpGate2Info.dGateBeginInPercentage=max(double(iGateBeginInMillisecond)/double(_iCurrentDisplayTimespan),double(0));
-    _gtpGate2Info.dGateEndInPercentage=min(double(iGateEndInMillisecond)/double(_iCurrentDisplayTimespan),double(1));
+    gtpGate2Info.iGateBeginInMillisecond=max(iGateBeginInMillisecond,0);
+    gtpGate2Info.iGateEndInMillisecond=min(iGateEndInMillisecond,iCurrentDisplayTimespan);
+    gtpGate2Info.dGateBeginInPercentage=max(double(iGateBeginInMillisecond)/double(iCurrentDisplayTimespan),double(0));
+    gtpGate2Info.dGateEndInPercentage=min(double(iGateEndInMillisecond)/double(iCurrentDisplayTimespan),double(1));
 }
 
 const GateParameters & DataSourceProvider::GetGate2Parameters(){
-    return _gtpGate2Info;
+    return gtpGate2Info;
 }
 
-QString DataSourceProvider::SamplingRateToString(bool IsUnitTranslationEnabled){
-    if (IsUnitTranslationEnabled){
-        if (_iCurrentSamplingRate>=UNIT_G){
-            return QString::number(double(_iCurrentSamplingRate)/double(UNIT_G),'g',5)+QString(" GHz");
+QString DataSourceProvider::SamplingRateToString(bool bIsUnitTranslationEnabled){
+    if (bIsUnitTranslationEnabled){
+        if (iCurrentSamplingRate>=UNIT_G){
+            return QString::number(double(iCurrentSamplingRate)/double(UNIT_G),'g',5)+QString(" GHz");
         }
-        else if (_iCurrentSamplingRate>=UNIT_M){
-            return QString::number(double(_iCurrentSamplingRate)/double(UNIT_M),'g',5)+QString(" MHz");
+        else if (iCurrentSamplingRate>=UNIT_M){
+            return QString::number(double(iCurrentSamplingRate)/double(UNIT_M),'g',5)+QString(" MHz");
         }
-        else if (_iCurrentSamplingRate>=UNIT_K){
-            return QString::number(double(_iCurrentSamplingRate)/double(UNIT_K),'g',5)+QString(" kHz");
+        else if (iCurrentSamplingRate>=UNIT_K){
+            return QString::number(double(iCurrentSamplingRate)/double(UNIT_K),'g',5)+QString(" kHz");
         }
         else{
-            return QString::number(_iCurrentSamplingRate)+QString(" Hz");
+            return QString::number(iCurrentSamplingRate)+QString(" Hz");
         }
     }
     else{
-        return QString::number(_iCurrentSamplingRate)+QString(" Hz");
+        return QString::number(iCurrentSamplingRate)+QString(" Hz");
     }
 }
 
-QString DataSourceProvider::SamplingRateToString(int iSamplingRateInHz, bool IsUnitTranslationEnabled){
+QString DataSourceProvider::SamplingRateToString(int iSamplingRateInHz, bool bIsUnitTranslationEnabled){
     iSamplingRateInHz=abs(iSamplingRateInHz);
-    if (IsUnitTranslationEnabled){
+    if (bIsUnitTranslationEnabled){
         if (iSamplingRateInHz>=UNIT_G){
             return QString::number(double(iSamplingRateInHz)/double(UNIT_G),'g',5)+QString(" GHz");
         }
@@ -169,26 +169,26 @@ QString DataSourceProvider::SamplingRateToString(int iSamplingRateInHz, bool IsU
     }
 }
 
-QString DataSourceProvider::GainToString(bool IsDbEnabled, bool IsDbOnly){
-    if (IsDbOnly){
-        return QString::number(DataSourceProvider::MultipleToDb(_dCurrentGain),'g',4)+QString(" dB");
+QString DataSourceProvider::GainToString(bool bIsDbEnabled, bool bIsDbOnly){
+    if (bIsDbOnly){
+        return QString::number(DataSourceProvider::MultipleToDb(dCurrentGain),'g',4)+QString(" dB");
     }
-    if (IsDbEnabled){
-        return QString("x")+QString::number(_dCurrentGain,'g',2)+QString(" (")+QString::number(DataSourceProvider::MultipleToDb(_dCurrentGain),'g',4)+QString(" dB)");
+    if (bIsDbEnabled){
+        return QString("x")+QString::number(dCurrentGain,'g',2)+QString(" (")+QString::number(DataSourceProvider::MultipleToDb(dCurrentGain),'g',4)+QString(" dB)");
     }
     else{
-        return QString("x")+QString::number(_dCurrentGain,'g',2);
+        return QString("x")+QString::number(dCurrentGain,'g',2);
     }
 }
 
-QString DataSourceProvider::GainToString(double dGainInMultiple, bool IsDbEnabled, bool IsDbOnly){
+QString DataSourceProvider::GainToString(double dGainInMultiple, bool bIsDbEnabled, bool bIsDbOnly){
     if (dGainInMultiple<=0){
         return QString("x0");
     }
-    if (IsDbOnly){
+    if (bIsDbOnly){
         return QString::number(DataSourceProvider::MultipleToDb(dGainInMultiple),'g',4)+QString(" dB");
     }
-    if (IsDbEnabled){
+    if (bIsDbEnabled){
         return QString("x")+QString::number(dGainInMultiple,'g',2)+QString(" (")+QString::number(DataSourceProvider::MultipleToDb(dGainInMultiple),'g',4)+QString(" dB)");
     }
     else{
@@ -197,7 +197,7 @@ QString DataSourceProvider::GainToString(double dGainInMultiple, bool IsDbEnable
 }
 
 QString DataSourceProvider::DisplayTimespanToString(){
-    return QString::number(_iCurrentDisplayTimespan)+QString(" ms");
+    return QString::number(iCurrentDisplayTimespan)+QString(" ms");
 }
 
 QString DataSourceProvider::DisplayTimespanToString(int iDisplayTimespanInMillisecond){
@@ -205,59 +205,59 @@ QString DataSourceProvider::DisplayTimespanToString(int iDisplayTimespanInMillis
 }
 
 const QVector<DATA_TYPE> & DataSourceProvider::GenerateDAC1(){
-    _arrDAC1.clear();
-    for (int i=1; i<=_iPointsPerPlot; ++i){
-        _arrDAC1.push_back(((double(rand())/double(__INT_MAX__)*10+50)*_dCurrentGain));
+    arrDAC1.clear();
+    for (int i=1; i<=iPointsPerPlot; ++i){
+        arrDAC1.push_back(((double(rand())/double(__INT_MAX__)*10+50)*dCurrentGain));
     }
-    return _arrDAC1;
+    return arrDAC1;
 }
 
 const QVector<DATA_TYPE> & DataSourceProvider::GenerateDAC2(){
-    _arrDAC2.clear();
-    for (int i=0; i<_iPointsPerPlot; ++i){
-        _arrDAC2.push_back(_arrDAC1[i]*2);
+    arrDAC2.clear();
+    for (int i=0; i<iPointsPerPlot; ++i){
+        arrDAC2.push_back(arrDAC1[i]*2);
     }
-    return _arrDAC2;
+    return arrDAC2;
 }
 
 const QVector<DATA_TYPE> & DataSourceProvider::GenerateDAC3(){
-    _arrDAC3.clear();
-    for (int i=0; i<_iPointsPerPlot; ++i){
-        _arrDAC3.push_back(_arrDAC1[i]/2);
+    arrDAC3.clear();
+    for (int i=0; i<iPointsPerPlot; ++i){
+        arrDAC3.push_back(arrDAC1[i]/2);
     }
-    return _arrDAC3;
+    return arrDAC3;
 }
 
 const QVector<DATA_TYPE> & DataSourceProvider::GenerateGate1(int iGateYValue, int iGateBeginInMillisecond, int iGateEndInMillisecond){
-    _arrGate1.clear();
-    _gtpGate1Info.iGateYValue=iGateYValue;
-    _gtpGate1Info.iGateBeginInMillisecond=max(iGateBeginInMillisecond,0);
-    _gtpGate1Info.iGateEndInMillisecond=min(iGateEndInMillisecond,_iCurrentDisplayTimespan);
-    _gtpGate1Info.dGateBeginInPercentage=max(double(iGateBeginInMillisecond)/double(_iCurrentDisplayTimespan),double(0));
-    _gtpGate1Info.dGateEndInPercentage=min(double(iGateEndInMillisecond)/double(_iCurrentDisplayTimespan),double(1));
-    for (int i=1; i<=_iPointsPerPlot; ++i){
-        _arrGate1.push_back(iGateYValue);
+    arrGate1.clear();
+    gtpGate1Info.iGateYValue=iGateYValue;
+    gtpGate1Info.iGateBeginInMillisecond=max(iGateBeginInMillisecond,0);
+    gtpGate1Info.iGateEndInMillisecond=min(iGateEndInMillisecond,iCurrentDisplayTimespan);
+    gtpGate1Info.dGateBeginInPercentage=max(double(iGateBeginInMillisecond)/double(iCurrentDisplayTimespan),double(0));
+    gtpGate1Info.dGateEndInPercentage=min(double(iGateEndInMillisecond)/double(iCurrentDisplayTimespan),double(1));
+    for (int i=1; i<=iPointsPerPlot; ++i){
+        arrGate1.push_back(iGateYValue);
     }
-    return _arrGate1;
+    return arrGate1;
 }
 
 const QVector<DATA_TYPE> & DataSourceProvider::GenerateGate2(int iGateYValue, int iGateBeginInMillisecond, int iGateEndInMillisecond){
-    _arrGate2.clear();
-    _gtpGate2Info.iGateYValue=iGateYValue;
-    _gtpGate2Info.iGateBeginInMillisecond=max(iGateBeginInMillisecond,0);
-    _gtpGate2Info.iGateEndInMillisecond=min(iGateEndInMillisecond,_iCurrentDisplayTimespan);
-    _gtpGate2Info.dGateBeginInPercentage=max(double(iGateBeginInMillisecond)/double(_iCurrentDisplayTimespan),double(0));
-    _gtpGate2Info.dGateEndInPercentage=min(double(iGateEndInMillisecond)/double(_iCurrentDisplayTimespan),double(1));
-    for (int i=1; i<=_iPointsPerPlot; ++i){
-        _arrGate2.push_back(iGateYValue);
+    arrGate2.clear();
+    gtpGate2Info.iGateYValue=iGateYValue;
+    gtpGate2Info.iGateBeginInMillisecond=max(iGateBeginInMillisecond,0);
+    gtpGate2Info.iGateEndInMillisecond=min(iGateEndInMillisecond,iCurrentDisplayTimespan);
+    gtpGate2Info.dGateBeginInPercentage=max(double(iGateBeginInMillisecond)/double(iCurrentDisplayTimespan),double(0));
+    gtpGate2Info.dGateEndInPercentage=min(double(iGateEndInMillisecond)/double(iCurrentDisplayTimespan),double(1));
+    for (int i=1; i<=iPointsPerPlot; ++i){
+        arrGate2.push_back(iGateYValue);
     }
-    return _arrGate2;
+    return arrGate2;
 }
 
 const QVector<DATA_TYPE> & DataSourceProvider::GeneratePlotForTesting(){
-    _arrData.clear();
-    for (int i=1; i<=_iPointsPerPlot; ++i){
-        _arrData.push_back((double(rand())/double(__INT_MAX__)+40*sin(5.0*3.1415926*i/_iPointsPerPlot)+100)*_dCurrentGain);
+    arrData.clear();
+    for (int i=1; i<=iPointsPerPlot; ++i){
+        arrData.push_back((double(rand())/double(__INT_MAX__)+40*sin(5.0*3.1415926*i/iPointsPerPlot)+100)*dCurrentGain);
     }
-    return _arrData;
+    return arrData;
 }

@@ -3,17 +3,17 @@
 LineChart::LineChart(QWidget *parent){
     setAutoFillBackground(true);
     Layers.push_back(LineChartLayer());
-    _AxisPen=QPen(Qt::white,1.5);
-    _GridPen=QPen(Qt::white,0.5,Qt::DashLine);
-    _iYAxisMin=0;
-    _iYAxisMax=50;
-    _iLeftMargin=20;
-    _iRightMargin=20;
-    _iTopMargin=20;
-    _iBottomMargin=20;
-    _IsReplotting=false;
-    _IsReplotQueued=false;
-    _IsPlotSequenceInversed=false;
+    qpnAxisPen=QPen(Qt::white,1.5);
+    qpnGridPen=QPen(Qt::white,0.5,Qt::DashLine);
+    iYAxisMin=0;
+    iYAxisMax=50;
+    iLeftMargin=20;
+    iRightMargin=20;
+    iTopMargin=20;
+    iBottomMargin=20;
+    bIsReplotting=false;
+    bIsReplotQueued=false;
+    bIsPlotSequenceInversed=false;
 }
 
 LineChart::~LineChart(){
@@ -23,22 +23,22 @@ LineChart::~LineChart(){
 void LineChart::paintEvent(QPaintEvent *){
 
     /* Calculate canvas */
-    QPoint TopLeft(_iLeftMargin, _iTopMargin);
-    QPoint TopRight(this->width()-_iRightMargin, _iTopMargin);
-    QPoint BottomLeft(_iBottomMargin, this->height()-_iLeftMargin);
-    QPoint BottomRight(this->width()-_iRightMargin, this->height()-_iBottomMargin);
+    QPoint TopLeft(iLeftMargin, iTopMargin);
+    QPoint TopRight(this->width()-iRightMargin, iTopMargin);
+    QPoint BottomLeft(iBottomMargin, this->height()-iLeftMargin);
+    QPoint BottomRight(this->width()-iRightMargin, this->height()-iBottomMargin);
 
     QPainter painter(this);
 
     /* Draw axis */
-    painter.setPen(_AxisPen);
+    painter.setPen(qpnAxisPen);
     painter.drawLine(TopLeft, BottomLeft);
     painter.drawLine(BottomLeft, BottomRight);
     painter.drawLine(TopLeft,TopRight);
     painter.drawLine(TopRight,BottomRight);
 
     /* Draw grid */
-    painter.setPen(_GridPen);
+    painter.setPen(qpnGridPen);
     if (this->width()>200)
     {
         painter.drawLine((TopLeft+TopRight)/2, (BottomLeft+BottomRight)/2);
@@ -65,46 +65,46 @@ void LineChart::paintEvent(QPaintEvent *){
 
     /* Draw every layer */
     for (int iLayerIndexFake=0; iLayerIndexFake<Layers.count(); ++iLayerIndexFake){
-        int iLayerIndex = _IsPlotSequenceInversed?Layers.count()-1-iLayerIndexFake:iLayerIndexFake; //Calculate the real layer index.
-        if (0==Layers.at(iLayerIndex).DataBuffer.count()){ //Check if we have data.
+        int iLayerIndex = bIsPlotSequenceInversed?Layers.count()-1-iLayerIndexFake:iLayerIndexFake; //Calculate the real layer index.
+        if (0==Layers.at(iLayerIndex).arrDataBuffer.count()){ //Check if we have data.
             continue;
         }
-        if (!Layers.at(iLayerIndex).IsVisible){ //Skip invisible layers.
+        if (!Layers.at(iLayerIndex).bIsVisible){ //Skip invisible layers.
             continue;
         }
-        painter.setPen(Layers.at(iLayerIndex).LinePlotPen);
-        int chartWidth = this->width()-_iLeftMargin-_iRightMargin;
-        int chartHeight = this->height()-_iTopMargin-_iBottomMargin;
-        int yMax = _iYAxisMax-_iYAxisMin;
-        int xMax = Layers.at(iLayerIndex).DataBuffer.count();
-        if (!Layers.at(iLayerIndex).IsCachingDisabled && !Layers.at(iLayerIndex).IsUpdateRequested && !Layers.at(iLayerIndex).IsForcedUpdateRequested && Layers.at(iLayerIndex).IsCached){ //Load buffer for unchanged layers
-            painter.drawPath(Layers.at(iLayerIndex)._PathCache); //If an up-to-date cache is available, draw it.
+        painter.setPen(Layers.at(iLayerIndex).qpnLinePlotPen);
+        int chartWidth = this->width()-iLeftMargin-iRightMargin;
+        int chartHeight = this->height()-iTopMargin-iBottomMargin;
+        int yMax = iYAxisMax-iYAxisMin;
+        int xMax = Layers.at(iLayerIndex).arrDataBuffer.count();
+        if (!Layers.at(iLayerIndex).bIsCachingDisabled && !Layers.at(iLayerIndex).bIsUpdateRequested && !Layers.at(iLayerIndex).bIsForcedUpdateRequested && Layers.at(iLayerIndex).bIsCached){ //Load buffer for unchanged layers
+            painter.drawPath(Layers.at(iLayerIndex).cchPathCache); //If an up-to-date cache is available, draw it.
             continue;
         }
         QPainterPath path;
         QPointF tmp;
-        tmp.setX(_iLeftMargin+chartWidth*Layers.at(iLayerIndex).XAxisClippingBeginPercentage);
-        tmp.setY(_iTopMargin+chartHeight*(yMax-Layers.at(iLayerIndex).DataBuffer.at(Layers.at(iLayerIndex).DataBuffer.count()*Layers.at(iLayerIndex).XAxisClippingBeginPercentage))/yMax);
+        tmp.setX(iLeftMargin+chartWidth*Layers.at(iLayerIndex).dXAxisClippingBeginPercentage);
+        tmp.setY(iTopMargin+chartHeight*(yMax-Layers.at(iLayerIndex).arrDataBuffer.at(Layers.at(iLayerIndex).arrDataBuffer.count()*Layers.at(iLayerIndex).dXAxisClippingBeginPercentage))/yMax);
         path.moveTo(tmp);
-        for (int i = Layers.at(iLayerIndex).DataBuffer.count()*Layers.at(iLayerIndex).XAxisClippingBeginPercentage; i < xMax*Layers.at(iLayerIndex).XAxisClippingEndPercentage; ++i){
-            tmp.setX(_iLeftMargin+chartWidth*i/xMax);
-            tmp.setY(_iTopMargin+chartHeight*(yMax-Layers.at(iLayerIndex).DataBuffer.at(i))/yMax);
+        for (int i = Layers.at(iLayerIndex).arrDataBuffer.count()*Layers.at(iLayerIndex).dXAxisClippingBeginPercentage; i < xMax*Layers.at(iLayerIndex).dXAxisClippingEndPercentage; ++i){
+            tmp.setX(iLeftMargin+chartWidth*i/xMax);
+            tmp.setY(iTopMargin+chartHeight*(yMax-Layers.at(iLayerIndex).arrDataBuffer.at(i))/yMax);
             path.lineTo(tmp);
         }
         painter.drawPath(path);
 
-        if (!Layers.at(iLayerIndex).IsCachingDisabled){ //Save path to cache
-            Layers[iLayerIndex]._PathCache=path;
-            Layers[iLayerIndex].IsCached=true;
+        if (!Layers.at(iLayerIndex).bIsCachingDisabled){ //Save path to cache
+            Layers[iLayerIndex].cchPathCache=path;
+            Layers[iLayerIndex].bIsCached=true;
         }
 
-        Layers[iLayerIndex].IsForcedUpdateRequested=false;
+        Layers[iLayerIndex].bIsForcedUpdateRequested=false;
     }
 }
 
 void LineChart::resizeEvent(){ //If size changed, force a full update
     for (int i=0; i<Layers.count(); ++i){
-        Layers[i].IsForcedUpdateRequested=true;
+        Layers[i].bIsForcedUpdateRequested=true;
     }
 }
 
@@ -115,62 +115,62 @@ void LineChart::resizeEvent(){ //If size changed, force a full update
  * Ref. QCustomPlot
  */
 void LineChart::ReplotSingleLayer(int iLayerIndex, bool bUseQueuedReplot){
-    _IsReplotIndexesDefined=false;
+    bIsReplotIndexesDefined=false;
     for (int i=0;i<Layers.count();++i){
         if (i==iLayerIndex){
-            Layers[i].IsUpdateRequested=true;
+            Layers[i].bIsUpdateRequested=true;
         }
         else{
-            Layers[i].IsUpdateRequested=false;
+            Layers[i].bIsUpdateRequested=false;
         }
     }
-    _IsReplotIndexesDefined=true;
+    bIsReplotIndexesDefined=true;
 
     if (bUseQueuedReplot){ //Queue a replot request
-        if (!_IsReplotQueued){
-            _IsReplotQueued=true;
+        if (!bIsReplotQueued){
+            bIsReplotQueued=true;
             QTimer::singleShot(0, this, SLOT(Replot()));
         }
     }
 
-    if (_IsReplotting){
+    if (bIsReplotting){
         return; //Avoid signal loopback
     }
 
-    _IsReplotting=true;
-    _IsReplotQueued=false;
+    bIsReplotting=true;
+    bIsReplotQueued=false;
 
     this->update();
 
-    _IsReplotting=false;
+    bIsReplotting=false;
 
-    _IsReplotIndexesDefined=false;
+    bIsReplotIndexesDefined=false;
 }
 
 void LineChart::Replot(bool bUseQueuedReplot){
-    if (!_IsReplotIndexesDefined){
+    if (!bIsReplotIndexesDefined){
         for (int i=0;i<Layers.count();++i){
-            Layers[i].IsUpdateRequested=true;
+            Layers[i].bIsUpdateRequested=true;
         }
     }
 
     if (bUseQueuedReplot){ //Queue a replot request
-        if (!_IsReplotQueued){
-            _IsReplotQueued=true;
+        if (!bIsReplotQueued){
+            bIsReplotQueued=true;
             QTimer::singleShot(0, this, SLOT(Replot()));
         }
     }
 
-    if (_IsReplotting){
+    if (bIsReplotting){
         return; //Avoid signal loopback
     }
 
-    _IsReplotting=true;
-    _IsReplotQueued=false;
+    bIsReplotting=true;
+    bIsReplotQueued=false;
 
     this->update();
 
-    _IsReplotting=false;
+    bIsReplotting=false;
 }
 
 void LineChart::AddLayer(QPen qpnLinePlotPen){
@@ -187,13 +187,13 @@ void LineChart::SetYAxisRange(int iMin, int iMax){
     if (iMax<=iMin){
         iMax=iMin+1;
     }
-    _iYAxisMin=iMin;
-    _iYAxisMax=iMax;
+    iYAxisMin=iMin;
+    iYAxisMax=iMax;
 }
 
 void LineChart::SetLinePlotPen(int iLayerIndex, QPen qpnPen){
     if (iLayerIndex>=0 && iLayerIndex<Layers.count()){
-        Layers[iLayerIndex].LinePlotPen=qpnPen;
+        Layers[iLayerIndex].qpnLinePlotPen=qpnPen;
     }
 }
 
@@ -210,30 +210,30 @@ void LineChart::SetMargin(int iLeft, int iRight, int iTop, int iBottom){
     if (iBottom<0){
         iBottom=0;
     }
-    _iLeftMargin=iLeft;
-    _iRightMargin=iRight;
-    _iTopMargin=iTop;
-    _iBottomMargin=iBottom;
+    iLeftMargin=iLeft;
+    iRightMargin=iRight;
+    iTopMargin=iTop;
+    iBottomMargin=iBottom;
 }
 
 LineChartLayer::LineChartLayer(){
-    LinePlotPen=QPen(QColor(0,175,245,255),1);
-    IsVisible=true;
-    IsCachingDisabled=false;
-    IsCached=false;
-    IsUpdateRequested=true;
-    IsForcedUpdateRequested=true;
-    XAxisClippingBeginPercentage=0;
-    XAxisClippingEndPercentage=1;
+    qpnLinePlotPen=QPen(QColor(0,175,245,255),1);
+    bIsVisible=true;
+    bIsCachingDisabled=false;
+    bIsCached=false;
+    bIsUpdateRequested=true;
+    bIsForcedUpdateRequested=true;
+    dXAxisClippingBeginPercentage=0;
+    dXAxisClippingEndPercentage=1;
 }
 
-LineChartLayer::LineChartLayer(QPen qpnPen){
-    LinePlotPen=qpnPen;
-    IsVisible=true;
-    IsCachingDisabled=false;
-    IsCached=false;
-    IsUpdateRequested=true;
-    IsForcedUpdateRequested=true;
-    XAxisClippingBeginPercentage=0;
-    XAxisClippingEndPercentage=1;
+LineChartLayer::LineChartLayer(QPen qpnPenInit){
+    qpnLinePlotPen=qpnPenInit;
+    bIsVisible=true;
+    bIsCachingDisabled=false;
+    bIsCached=false;
+    bIsUpdateRequested=true;
+    bIsForcedUpdateRequested=true;
+    dXAxisClippingBeginPercentage=0;
+    dXAxisClippingEndPercentage=1;
 }

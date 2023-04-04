@@ -5,8 +5,8 @@ using namespace std;
 
 StateMachine::StateMachine(){
     cerr<<"StateMachine: Initialized, current state 0 (SM_STATE_NOTMAL)"<<endl;
-    _iCurrentState=SM_STATE_NOTMAL;
-    _iLastState=SM_STATE_NOTMAL;
+    iCurrentState=SM_STATE_NOTMAL;
+    iLastState=SM_STATE_NOTMAL;
 }
 
 StateMachine::~StateMachine(){
@@ -18,18 +18,18 @@ void StateMachine::SetCurrentState(int iNewState){
         cerr<<"StateMachine: Unknown state value met, state value was not changed."<<endl;
         return;
     }
-    _iLastState=_iCurrentState;
-    _iCurrentState=iNewState;
-    cerr<<"StateMachine: Entering state "<<_iCurrentState<<"."<<endl;
+    iLastState=iCurrentState;
+    iCurrentState=iNewState;
+    cerr<<"StateMachine: Entering state "<<iCurrentState<<"."<<endl;
     return;
 }
 
 int StateMachine::GetCurrentState(){
-    return _iCurrentState;
+    return iCurrentState;
 }
 
 void StateMachine::RevertToLastState(){
-    swap(_iCurrentState,_iLastState);
-    cerr<<"StateMachine: Entering state "<<_iCurrentState<<"."<<endl;
+    swap(iCurrentState,iLastState);
+    cerr<<"StateMachine: Entering state "<<iCurrentState<<"."<<endl;
     return;
 }
